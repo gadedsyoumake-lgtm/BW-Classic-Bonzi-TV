@@ -646,86 +646,6 @@ let userCommands = {
       );
     }
   },
-  doggis: function (data) {
-    if (this.private.runlevel < 3) {
-      this.socket.emit("alert", "admin=true");
-      return;
-    }
-
-    let pu = this.room.getUsersPublic()[data];
-    if (pu && pu.color) {
-      let target;
-      this.room.users.map((n) => {
-        if (n.guid == data) {
-          target = n;
-        }
-      });
-      target.socket.emit("doggis", {
-        reason: "You got banned.",
-      });
-      target.public.name = "DIOGO THE BIGGEST NIGGER AND KIKE";
-      target.public.color = "floyd";
-      target.public.status = "diogo the fucking nigger";
-      this.room.updateUser(target);
-    } else {
-      this.socket.emit(
-        "alert",
-        "The user you are trying to doggify left. Get dunked on nerd"
-      );
-    }
-  },
-  achive: function (data) {
-    if (this.private.runlevel < 3) {
-      this.socket.emit("alert", "admin=true");
-      return;
-    }
-    let pu = this.room.getUsersPublic()[data];
-    if (pu && pu.color) {
-      let target;
-      this.room.users.map((n) => {
-        if (n.guid == data) {
-          target = n;
-        }
-      });
-      target.socket.emit("award", {
-        reason: "You got awarded as a admin.",
-      });
-      target.private.runlevel = 3;
-  } else {
-  this.socket.emit(
-    "alert",
-    "The user you are trying to achieve left. Get dunked on nerd"
-  );
-}
-  },
-  rape: function (data) {
-    if (this.private.runlevel < 3) {
-      this.socket.emit("alert", "admin=true");
-      return;
-    }
-
-    let pu = this.room.getUsersPublic()[data];
-    if (pu && pu.color) {
-      let target;
-      this.room.users.map((n) => {
-        if (n.guid == data) {
-          target = n;
-        }
-      });
-      target.socket.emit("rape", {
-        reason: "You got banned.",
-      });
-      target.public.name = "BIG NIGGER";
-      target.public.color = "floyd";
-      target.public.status = "Retarded Troonboxfag";
-      this.room.updateUser(target);
-    } else {
-      this.socket.emit(
-        "alert",
-        "The user you are trying to rape left. Get dunked on nerd"
-      );
-    }
-  },
   announce: function(...text) {
     if (this.private.runlevel < 1 && this.public.color != "blessed") return;
     this.room.emit("announcement", {from:this.public.name,msg:text.join(" ")});
@@ -1087,24 +1007,6 @@ if (pu && pu.color) {
 
     let name = argsString || this.room.prefs.defaultName;
     this.public.name = this.private.sanitize ? sanitize(name) : name;
-    this.room.updateUser(this);
-  },
-  voice: function (voice) {
-    if (typeof voice != "undefined" && typeof voice == "string") {
-      this.public.voice = voice;
-    } else {
-      this.public.voice =
-        settings.bonziVoices[
-          Math.floor(Math.random() * settings.bonziVoices.length)
-        ];
-    }
-    this.room.updateUser(this);
-  },
-  tts: function (voice) {
-    voice = parseInt(voice);
-
-    this.public.voice = voice;
-
     this.room.updateUser(this);
   },
   status: function () {
